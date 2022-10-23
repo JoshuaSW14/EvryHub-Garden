@@ -10,6 +10,10 @@
 #define PIN_GREEN  22 // GIOP22
 #define PIN_BLUE   21 // GIOP21
 
+//Relay
+#define CONTROL_PIN1 34      // GPIO for control input 1
+#define CONTROL_PIN2 35      // GPIO for control input 2
+
 //AWS & WiFi Config
 #define AWS_IOT_PUBLISH_TOPIC   "evryhub/vent"
 #define AWS_IOT_SUBSCRIBE_TOPIC "evryhub/vent"
@@ -58,9 +62,9 @@ void connectAWS()
   }
 
   // LED Turns Green When Connected to WiFi
-  analogWrite(PIN_RED, 0);
-  analogWrite(PIN_GREEN, 255);
-  analogWrite(PIN_BLUE, 0);
+  // analogWrite(PIN_RED, 0);
+  // analogWrite(PIN_GREEN, 255);
+  // analogWrite(PIN_BLUE, 0);
 
   // Configure WiFiClientSecure to use the AWS IoT device credentials
   net.setCACert(AWS_CERT_CA);
@@ -91,9 +95,9 @@ void connectAWS()
   Serial.println("AWS IoT Connected!");
 
   // LED Turns Blue When Connected to AWS
-  analogWrite(PIN_RED, 0);
-  analogWrite(PIN_GREEN, 0);
-  analogWrite(PIN_BLUE, 255);
+  // analogWrite(PIN_RED, 0);
+  // analogWrite(PIN_GREEN, 0);
+  // analogWrite(PIN_BLUE, 255);
 }
  
 void publishMessage()
@@ -114,19 +118,26 @@ void setup() {
   pinMode(PIN_GREEN, OUTPUT);
   pinMode(PIN_BLUE, OUTPUT);
 
+  pinMode(CONTROL_PIN1, OUTPUT);     // control pin
+  pinMode(CONTROL_PIN2, OUTPUT);     // control pin
+
   // LED Turns RED When Device is Turned On
-  analogWrite(PIN_RED, 255);
-  analogWrite(PIN_GREEN, 0);
-  analogWrite(PIN_BLUE, 0);
+  // analogWrite(PIN_RED, 255);
+  // analogWrite(PIN_GREEN, 0);
+  // analogWrite(PIN_BLUE, 0);
   
-  connectAWS();
+  //connectAWS();
 }
 
 void loop() {
   //Read Soil Moisture
+  digitalWrite(CONTROL_PIN1, LOW);
+  digitalWrite(CONTROL_PIN2, HIGH);
+  delay(3000);
+  digitalWrite(CONTROL_PIN1, LOW);
+  digitalWrite(CONTROL_PIN2, LOW);
 
-
-  publishMessage();
-  client.loop();
+  //publishMessage();
+  //client.loop();
   delay(5000);
 }
